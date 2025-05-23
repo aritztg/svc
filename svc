@@ -1,18 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 import sys
-import os
-import codecs
 import xlrd
 import locale
-
-
-def to_unicode(input_str):
-    if sys.version_info < (3,):
-        return unicode(input_str)
-    else:
-        return str(input_str)
 
 
 def write_workbook(workbook):
@@ -25,7 +16,7 @@ def write_workbook(workbook):
         curr_row += 1
         row = worksheet.row(curr_row)
         line_values = []
-        line_values.append(to_unicode(curr_row))
+        line_values.append(str(curr_row))
         curr_cell = -1
         while curr_cell < num_cells:
             curr_cell += 1
@@ -34,27 +25,20 @@ def write_workbook(workbook):
             cell_type = worksheet.cell_type(curr_row, curr_cell)
             cell_value = worksheet.cell_value(curr_row, curr_cell)
             if cell_type == 2:
-                value = to_unicode(cell_value).replace('.0', '')
+                value = str(cell_value).replace('.0', '')
             else:
-                value = to_unicode(cell_value).replace('\n', ' ')
+                value = str(cell_value).replace('\n', ' ')
 
             line_values.append(value)
-        line_str = u'\t'.join(line_values)
+        line_str = '\t'.join(line_values)
 
         try:
             print(line_str)
-        except Exception:
-            e = sys.exc_info()[1]
-            print(Exception, e)
+        except Exception as e:
+            print(type(e), e)
 
 
 if __name__ == "__main__":
-    # Wrap sys.stdout into a StreamWriter to allow writing unicode.
-    if sys.version < '3':
-        sys.stdout = codecs.getwriter(
-            locale.getpreferredencoding())(
-            sys.stdout)
-
     if len(sys.argv) > 1:
         for input_file in sys.argv[1:]:
             if 'xls' in input_file.lower().split('.')[-1]:

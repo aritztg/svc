@@ -8,5 +8,6 @@ setup(name="SVC",
       url="https://github.com/aritztg/svc",
       license="GPL",
       scripts=["svc"],
-      install_requires = ["xlrd>=0.9.3"]
+      install_requires = ["xlrd>=1.2.0,<2.0.0"],
+      python_requires='>=3.6'
 )
